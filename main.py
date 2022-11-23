@@ -31,6 +31,7 @@ def upload_image():
     message = "Place holder text"
     if form.validate_on_submit():
         filename = photos.save(form.photo.data)
+        global file_url
         file_url = url_for('get_file', filename=filename)
         print(file_url)
         print(filename)
@@ -109,7 +110,7 @@ def render_message():
     return render_template('index.html',
                             message=message,
                             data=final.round(decimals=2),
-                            image_url=image_url)
+                            image_url=file_url)
 
 
 # def render_message():
