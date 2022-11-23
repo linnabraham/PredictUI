@@ -32,40 +32,43 @@ def upload_image():
     if form.validate_on_submit():
         filename = photos.save(form.photo.data)
         file_url = url_for('get_file', filename=filename)
-                #Loading CNN model
-        saved_model = 'saved_models/bestmodel.h5'
-        model = load_model(saved_model)
-        try:
-            #Get image URL as input
-            #image_url = request.form['image_url']
-            x = load_img(file_url)
-            #image = io.imread(image_url)
+        print(file_url)
+        print(filename)
+        # #Loading CNN model
+        # saved_model = 'saved_models/bestmodel.h5'
+        # model = load_model(saved_model)
+        # try:
+        #     #Get image URL as input
+        #     #image_url = request.form['image_url']
+        #     x = load_img(file_url)
+        #     #image = io.imread(image_url)
             
-            #Apply same preprocessing used while training CNN model
-            # image_small = st.resize(image, (32,32,3))
-            # x = np.expand_dims(image_small.transpose(2, 0, 1), axis=0)
+        #     #Apply same preprocessing used while training CNN model
+        #     # image_small = st.resize(image, (32,32,3))
+        #     # x = np.expand_dims(image_small.transpose(2, 0, 1), axis=0)
             
-            #Call classify function to predict the image class using the loaded CNN model
-            # final,pred_class = classify(x, model)
-            # print(pred_class)
-            # print(final)
-            #preds = model.predict(x)
-            preds = "Hey"
-            #Store model prediction results to pass to the web page
-            message = "Model prediction: {}".format(preds)
-            print('Python module executed successfully')
+        #     #Call classify function to predict the image class using the loaded CNN model
+        #     # final,pred_class = classify(x, model)
+        #     # print(pred_class)
+        #     # print(final)
+        #     #preds = model.predict(x)
+        #     preds = "Hey"
+        #     #Store model prediction results to pass to the web page
+        #     message = "Model prediction: {}".format(preds)
+        #     print('Python module executed successfully')
             
-        except Exception as e:
-            #Store error to pass to the web page
-            message = "Error encountered. Try another image. ErrorClass: {}, Argument: {} and Traceback details are: {}".format(e.__class__,e.args,e.__doc__)
-            final = pd.DataFrame({'A': ['Error'], 'B': [0]})
+        # except Exception as e:
+        #     #Store error to pass to the web page
+        #     message = "Error encountered. Try another image. ErrorClass: {}, Argument: {} and Traceback details are: {}".format(e.__class__,e.args,e.__doc__)
+        #     final = pd.DataFrame({'A': ['Error'], 'B': [0]})
         
 
     else:
         file_url=None
 
 
-    return render_template('index.html', message=message, form=form, file_url=file_url)
+    # return render_template('index.html', message=message, form=form, file_url=file_url)
+    return render_template('index.html', form=form, file_url=file_url)
 
 import glob
 from PIL import Image
@@ -82,6 +85,31 @@ def load_img(imgpath):
     x = np.expand_dims(npimg, axis=0)
     x = x* (1./255)
     return x
+
+@app.route('/predict_object/', methods=['GET', 'POST'])
+def render_message():
+    #Loading CNN model
+    saved_model = 'saved_models/bestmodel.h5'
+    model = load_model(saved_model)
+    
+    try:        
+        x = load_img(file_url)
+
+        pred = "hi"
+        #Store model prediction results to pass to the web page
+        message = "Model prediction: {}".format(pred)
+        print('Python module executed successfully')
+        
+    except Exception as e:
+        #Store error to pass to the web page
+        message = "Error encountered. Try another image. ErrorClass: {}, Argument: {} and Traceback details are: {}".format(e.__class__,e.args,e.__doc__)
+        final = pd.DataFrame({'A': ['Error'], 'B': [0]})
+        
+    #Return the model results to the web page
+    return render_template('index.html',
+                            message=message,
+                            data=final.round(decimals=2),
+                            image_url=image_url)
 
 
 # def render_message():
