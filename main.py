@@ -92,9 +92,11 @@ def render_message():
     #Loading CNN model
     saved_model = 'saved_models/bestmodel.h5'
     model = load_model(saved_model)
-    
-    try:        
-        x = load_img(file_url)
+    print(file_url)
+    try:
+        image_url = request.form['image_url']
+
+        x = load_img(image_url)
 
         pred = "hi"
         #Store model prediction results to pass to the web page
