@@ -28,41 +28,42 @@ def get_file(filename):
 @app.route('/', methods=['GET','POST'])
 def upload_image():
     form = UploadForm()
+    message = "Place holder text"
     if form.validate_on_submit():
         filename = photos.save(form.photo.data)
         file_url = url_for('get_file', filename=filename)
                 #Loading CNN model
         saved_model = 'saved_models/bestmodel.h5'
         model = load_model(saved_model)
+        try:
+            #Get image URL as input
+            #image_url = request.form['image_url']
+            x = load_img(file_url)
+            #image = io.imread(image_url)
+            
+            #Apply same preprocessing used while training CNN model
+            # image_small = st.resize(image, (32,32,3))
+            # x = np.expand_dims(image_small.transpose(2, 0, 1), axis=0)
+            
+            #Call classify function to predict the image class using the loaded CNN model
+            # final,pred_class = classify(x, model)
+            # print(pred_class)
+            # print(final)
+            #preds = model.predict(x)
+            preds = "Hey"
+            #Store model prediction results to pass to the web page
+            message = "Model prediction: {}".format(preds)
+            print('Python module executed successfully')
+            
+        except Exception as e:
+            #Store error to pass to the web page
+            message = "Error encountered. Try another image. ErrorClass: {}, Argument: {} and Traceback details are: {}".format(e.__class__,e.args,e.__doc__)
+            final = pd.DataFrame({'A': ['Error'], 'B': [0]})
         
 
     else:
         file_url=None
 
-    try:
-        #Get image URL as input
-        #image_url = request.form['image_url']
-        x = load_img(file_url)
-        #image = io.imread(image_url)
-        
-        #Apply same preprocessing used while training CNN model
-        # image_small = st.resize(image, (32,32,3))
-        # x = np.expand_dims(image_small.transpose(2, 0, 1), axis=0)
-        
-        #Call classify function to predict the image class using the loaded CNN model
-        # final,pred_class = classify(x, model)
-        # print(pred_class)
-        # print(final)
-        #preds = model.predict(x)
-        preds = "Hey"
-        #Store model prediction results to pass to the web page
-        message = "Model prediction: {}".format(preds)
-        print('Python module executed successfully')
-        
-    except Exception as e:
-        #Store error to pass to the web page
-        message = "Error encountered. Try another image. ErrorClass: {}, Argument: {} and Traceback details are: {}".format(e.__class__,e.args,e.__doc__)
-        final = pd.DataFrame({'A': ['Error'], 'B': [0]})
 
     return render_template('index.html', message=message, form=form, file_url=file_url)
 
