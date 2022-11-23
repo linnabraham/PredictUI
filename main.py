@@ -110,9 +110,7 @@ def render_message():
         
     #Return the model results to the web page
     return render_template('index.html',
-                            message=message,
-                            data=final.round(decimals=2),
-                            image_url=file_url)
+                            message=message)
 
 
 # def render_message():
