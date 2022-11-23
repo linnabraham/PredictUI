@@ -92,7 +92,7 @@ def render_message():
     #Loading CNN model
     saved_model = 'saved_models/bestmodel.h5'
     model = load_model(saved_model)
-    print(file_url)
+    # print(file_url)
     try:
         image_url = request.form['image_url']
 
@@ -112,8 +112,7 @@ def render_message():
     #Return the model results to the web page
     return render_template('index.html',
                             message=message,
-                            data=final.round(decimals=2),
-                            image_url=file_url)
+                            data=final.round(decimals=2))
 
 
 # def render_message():
