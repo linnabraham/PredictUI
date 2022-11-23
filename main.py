@@ -98,7 +98,8 @@ def render_message():
 
         x = load_img(image_url)
 
-        pred = "hi"
+        preds = model.predict(x)
+        final = preds[0]
         #Store model prediction results to pass to the web page
         message = "Model prediction: {}".format(pred)
         print('Python module executed successfully')
@@ -110,7 +111,9 @@ def render_message():
         
     #Return the model results to the web page
     return render_template('index.html',
-                            message=message)
+                            message=message,
+                            data=final.round(decimals=2),
+                            image_url=file_url)
 
 
 # def render_message():
