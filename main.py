@@ -101,7 +101,7 @@ def render_message():
         preds = model.predict(x)
         final = preds[0]
         #Store model prediction results to pass to the web page
-        message = "Model prediction: {}".format(pred)
+        message = "Model prediction: {}".format(preds)
         print('Python module executed successfully')
         
     except Exception as e:
